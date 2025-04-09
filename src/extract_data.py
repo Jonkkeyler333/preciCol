@@ -4,4 +4,4 @@ import numpy as np
 import json,os,requests
 
 spark_s=(SparkSession.builder.appName("Extract Data").getOrCreate())
-print(spark_s.context)
+print(spark_s.sparkContext)
