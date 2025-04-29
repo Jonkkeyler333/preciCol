@@ -35,5 +35,5 @@ while True:
     spark_df.printSchema()
     spark_df.show(10)
     spark_df=spark_df.withColumn('year',functions.year(spark_df['fechaobservacion']))
-    spark_df.write.mode("append").partitionbBy('year').parquet(hdfs_output_path)
+    spark_df.write.mode("append").partitionBy('year').parquet(hdfs_output_path)
     offset+=limit
