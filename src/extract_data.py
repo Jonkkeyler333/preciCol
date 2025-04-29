@@ -7,11 +7,13 @@ import numpy as np
 import json,os,requests,time
 
 
-def fetch_data(offset,limit,url,max_retries=4):
+def fetch_data(offset,limit,url:str,max_retries=4,city:str=None):
+    if not city:
+        raise ValueError("City parameter is required.")
     params={"$offset":offset,
             '$limit':limit,
             '$order':'fechaobservacion',
-            "$where":"fechaobservacion > '2020-01-01T00:00:00.000' and fechaobservacion < '2025-01-01T00:00.000'"}
+            "$where":f"fechaobservacion > '2024-01-01T00:00:00.000' and fechaobservacion < '2025-01-01T00:00.000' and municipio = {city.upper()}"}
     backoff=1
     for i in range(max_retries):
         try:
@@ -33,7 +35,8 @@ def fetch_data(offset,limit,url,max_retries=4):
     return []
 
 if __name__ == "__main__":
-    hdfs_output_path ="hdfs:///user/hadoop/data_project/"
+    city='BUCARAMANGA'
+    hdfs_output_path =f"hdfs:///user/hadoop/data_project/{city}/"
     url='https://www.datos.gov.co/resource/s54a-sgyg.json'
     spark_s=(SparkSession.builder.appName("Extract Data").getOrCreate())
     print(spark_s.sparkContext)
@@ -42,7 +45,7 @@ if __name__ == "__main__":
     batch_number=0
 
     while True:
-        data=fetch_data(offset=offset,limit=limit,url=url)
+        data=fetch_data(offset=offset,limit=limit,url=url,city=city)
         if not data:
             break
         batch_number+=1
@@ -52,6 +55,6 @@ if __name__ == "__main__":
         spark_df=spark_df.orderBy(spark_df['fechaobservacion'],ascending=True)
         spark_df.printSchema()
         spark_df.show(10)
-        spark_df=spark_df.withColumn('year',functions.year(spark_df['fechaobservacion']))
-        spark_df.write.mode("append").partitionBy('year').parquet(hdfs_output_path)
+        spark_df=spark_df.withColumn('month',functions.month(spark_df['fechaobservacion']))
+        spark_df.write.mode("append").partitionBy('month').parquet(hdfs_output_path)
         offset+=limit
