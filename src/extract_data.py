@@ -13,7 +13,7 @@ def fetch_data(offset,limit,url:str,max_retries=4,city:str=None):
     params={"$offset":offset,
             '$limit':limit,
             '$order':'fechaobservacion',
-            "$where":f"fechaobservacion > '2024-01-01T00:00:00.000' and fechaobservacion < '2025-01-01T00:00.000' and municipio = {city.upper()}"}
+            "$where":f"fechaobservacion > '2024-01-01T00:00:00.000' and fechaobservacion < '2025-01-01T00:00.000' and municipio == {city.upper()}"}
     backoff=1
     for i in range(max_retries):
         try:
