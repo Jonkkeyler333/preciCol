@@ -47,6 +47,7 @@ if __name__ == "__main__":
     while True:
         data=fetch_data(offset=offset,limit=limit,url=url,city=city)
         if not data:
+            print("No more data to fetch. Exiting...")
             break
         batch_number+=1
         print(f"Batch number: {batch_number} with offset: {offset} and limit: {limit}")
