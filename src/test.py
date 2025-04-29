@@ -4,7 +4,7 @@ sys.path.insert(0, '/home/hadoop/myenv/lib/python3.12/site-packages')
 from pyspark.sql import SparkSession, functions
 
 if __name__ == "__main__":
-    city = "MEDELLIN"
+    city = "MEDELLÍN"
     hdfs_path = f"hdfs:///user/hadoop/data_project/{city}/"
 
     spark = SparkSession.builder.appName("Verify Data").getOrCreate()
