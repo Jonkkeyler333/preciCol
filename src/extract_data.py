@@ -35,7 +35,7 @@ def fetch_data(offset,limit,url:str,max_retries=4,city:str=None):
     return []
 
 if __name__ == "__main__":
-    city='BUCARAMANGA'
+    city='MEDELLIN'
     hdfs_output_path =f"hdfs:///user/hadoop/data_project/{city}/"
     url='https://www.datos.gov.co/resource/s54a-sgyg.json'
     spark_s=(SparkSession.builder.appName("Extract Data").getOrCreate())
