@@ -1,5 +1,5 @@
 from pyspark.sql import SparkSession
-import json,os,requests
+import json,os,requests,time
 
 capitales_departamentos = [
     'LETICIA',        # Amazonas
@@ -55,3 +55,4 @@ for capital in capitales_departamentos:
   spark_df=spark_df.withColumn('fechaobservacion',spark_df['fechaobservacion'].cast("timestamp"))
   spark_df=spark_df.orderBy(spark_df['fechaobservacion'],ascending=True)
   print(spark_df.show(5))
+  time.sleep(5)
