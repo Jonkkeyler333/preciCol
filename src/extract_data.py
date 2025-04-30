@@ -71,6 +71,9 @@ if __name__ == "__main__":
     for city in capitales_departamentos:
         print(f"Processing data for {city}")
         hdfs_output_path =f"hdfs:///user/hadoop/data_project/{city}/"
+        if os.system(f"hdfs dfs -test -d {hdfs_output_path}") == 0:
+            print(f"Data for {city} already exists. Skipping...")
+            continue
         url='https://www.datos.gov.co/resource/s54a-sgyg.json'
         offset=0
         limit=10000
@@ -91,6 +94,6 @@ if __name__ == "__main__":
             spark_df.write.mode("append").partitionBy('month').parquet(hdfs_output_path)
             offset+=limit
         print(f"Data for {city} processed successfully",end='\n')
-        time.sleep(7)
+        time.sleep(20)
     spark_s.stop()
     print("Data extraction completed successfully.")
