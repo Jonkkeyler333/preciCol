@@ -25,7 +25,7 @@ def fetch_data(offset,limit,url:str,max_retries=4,city:str=None):
     backoff=1
     for i in range(max_retries):
         try:
-            r=requests.get(url=url,params=params,timeout=40)
+            r=requests.get(url=url,params=params,timeout=120)
             if r.status_code==429:
                 print("Rate limit exceeded.Sleep and retrying...")
                 time.sleep(backoff)
