@@ -57,7 +57,6 @@ if __name__ == "__main__":
         'QUIBDÓ',         # Chocó
         'MONTERÍA',       # Córdoba
         'BOGOTA D.C',    # Cundinamarca (distrito capital)
-        'INÍRIDA',        # Guainía
         'NEIVA',          # Huila
         'RIOHACHA',       # La Guajira
         'SANTA MARTA',    # Magdalena
@@ -72,7 +71,9 @@ if __name__ == "__main__":
         'IBAGUÉ',         # Tolima
         'CALI',           # Valle del Cauca
         'MITÚ',           # Vaupés
-        'CUMARIBO'  # Vichada
+        'CUMARIBO',# Vichada
+        'SAN JOSÉ DEL GUAVIARE', # Guaviare
+        'INÍRIDA'        # Guainía
     ]
     spark_s=(SparkSession.builder.appName("Extract Data").getOrCreate())
     print(spark_s.sparkContext)
