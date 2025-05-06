@@ -2,9 +2,17 @@ import sys,os
 sys.path.insert(0,'/home/hadoop/myenv/lib/python3.12/site-packages')
 
 from pyspark.sql import SparkSession,functions
+from pyspark.errors import AnalysisException
 import pandas as pd
 import numpy as np
 import json,os,requests,time
+
+def hdfs_exists(spark_s,path):
+    try:
+        spark_s.read.parquet(path)
+        return True
+    except AnalysisException:
+        return False
 
 
 def fetch_data(offset,limit,url:str,max_retries=4,city:str=None):
@@ -69,6 +77,9 @@ if __name__ == "__main__":
     spark_s=(SparkSession.builder.appName("Extract Data").getOrCreate())
     print(spark_s.sparkContext)
     for city in capitales_departamentos:
+        if hdfs_exists(spark_s,f"hdfs:///user/hadoop/data_project/{city}/"):
+            print(f"Data for {city} already exists. Skipping...")
+            continue
         print(f"Processing data for {city}")
         hdfs_output_path =f"hdfs:///user/hadoop/data_project/{city}/"
         url='https://www.datos.gov.co/resource/s54a-sgyg.json'
