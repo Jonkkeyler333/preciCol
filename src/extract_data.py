@@ -46,7 +46,7 @@ if __name__ == "__main__":
     capitales_departamentos = [
         'LETICIA',        # Amazonas
         'ARAUCA',         # Arauca
-        'BARRANQUILLA',   # Atlántico
+        'SOLEDAD',   # Atlántico
         'CARTAGENA DE INDIAS',      # Bolívar
         'SOGAMOSO',          # Boyacá
         'MANIZALES',      # Caldas
