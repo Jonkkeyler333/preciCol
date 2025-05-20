@@ -2,6 +2,7 @@ import sys
 sys.path.insert(0, '/home/hadoop/myenv/lib/python3.12/site-packages')
 
 from pyspark.sql import SparkSession, functions
+from pyspark.errors.exceptions.captured import AnalysisException
 
 def inspect_data(spark,city,txt_output=None):
     hdfs_path=f'hdfs:///user/hadoop/data_project/{city}/'
@@ -19,7 +20,7 @@ def inspect_data(spark,city,txt_output=None):
 if __name__ == "__main__":
     spark=SparkSession.builder.appName("Inspect Data").getOrCreate()
     capitales_departamentos = [
-        'Venezuela',        # Amazonas
+        'LETICIA',        # Amazonas
         'ARAUCA',         # Arauca
         'SOLEDAD',   # Atlántico
         'CARTAGENA DE INDIAS',      # Bolívar
@@ -51,6 +52,10 @@ if __name__ == "__main__":
         'INÍRIDA'        # Guainía
     ]
     for city in capitales_departamentos:
-        inspect_data(spark,city)
+        try:
+            print(f"Processing data for {city}")
+            inspect_data(spark,city)
+        except AnalysisException as e:
+            print(f"The data not exists {city}: {e}")
     spark.stop()
     print("Data inspection completed.")
