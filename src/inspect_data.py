@@ -20,7 +20,6 @@ def inspect_data(spark,city,txt_output=None):
 if __name__ == "__main__":
     spark=SparkSession.builder.appName("Inspect Data").getOrCreate()
     capitales_departamentos = [
-        'LETICIA',        # Amazonas
         'ARAUCA',         # Arauca
         'SOLEDAD',   # Atlántico
         'CARTAGENA DE INDIAS',      # Bolívar
