@@ -4,7 +4,7 @@ sys.path.insert(0, '/home/hadoop/myenv/lib/python3.12/site-packages')
 from pyspark.sql import SparkSession, functions
 
 def inspect_data(spark,city,txt_output=None):
-    hdfs_path=f'"hdfs:///user/hadoop/data_project/{city}/"'
+    hdfs_path=f'hdfs:///user/hadoop/data_project/{city}/'
     print(f"Reading data from: {hdfs_path} for city: {city}")
     df=spark.read.parquet(hdfs_path)
     print("Schema:")
