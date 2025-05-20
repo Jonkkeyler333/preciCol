@@ -11,7 +11,7 @@ def preprocess(path):
     df=df.orderBy('fechaobservacion',ascending=True)
     null_counts=df.select([F.sum(c).isNull().cast('int').alias(c) for c in df.columns])
     print('Missing values',null_counts,sep='\n')
-    df = df.drop(['codigoestacion', 'codigosensor', 'departamento', 'descripcionsensor', 'nombreestacion', 'unidadmedida'])
+    df = df.drop('codigoestacion', 'codigosensor', 'departamento', 'descripcionsensor', 'nombreestacion', 'unidadmedida')
     df_t=df.groupby(F.window(F.col('fechaobservacion'),"10 minutes")
     ).agg(F.sum('valorobservado').alias()
     ).selectExpr("window.start as fecha_10min","precip_10min")
