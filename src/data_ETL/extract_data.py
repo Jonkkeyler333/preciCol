@@ -44,36 +44,37 @@ def fetch_data(offset,limit,url:str,max_retries=4,city:str=None):
 
 if __name__ == "__main__":
     capitales_departamentos = [
-        'LETICIA',        # Amazonas
-        'ARAUCA',         # Arauca
-        'SOLEDAD',   # Atlántico
-        'CARTAGENA DE INDIAS',      # Bolívar
-        'SOGAMOSO',          # Boyacá
-        'MANIZALES',      # Caldas
-        'FLORENCIA',      # Caquetá
-        'YOPAL',          # Casanare
-        'POPAYÁN',        # Cauca
-        'VALLEDUPAR',     # Cesar
-        'QUIBDÓ',         # Chocó
-        'MONTERÍA',       # Córdoba
-        'BOGOTA D.C',    # Cundinamarca (distrito capital)
-        'NEIVA',          # Huila
-        'RIOHACHA',       # La Guajira
-        'SANTA MARTA',    # Magdalena
-        'VILLAVICENCIO',  # Meta
-        'PASTO',          # Nariño
-        'CÚCUTA',         # Norte de Santander
-        'MOCOA',          # Putumayo
-        'ARMENIA',        # Quindío
-        'PEREIRA',        # Risaralda
-        'SAN ANDRÉS',     # San Andrés y Providencia
-        'SINCELEJO',      # Sucre
-        'IBAGUÉ',         # Tolima
-        'CALI',           # Valle del Cauca
-        'MITÚ',           # Vaupés
-        'CUMARIBO',# Vichada
-        'SAN JOSÉ DEL GUAVIARE', # Guaviare
-        'INÍRIDA'        # Guainía
+        'ARAUCA',        
+        'SOLEDAD', 
+        'CARTAGENA DE INDIAS',  
+        'SOGAMOSO',          
+        'MANIZALES',      
+        'FLORENCIA',      
+        'YOPAL',         
+        'POPAYÁN',        
+        'VALLEDUPAR',     
+        'QUIBDÓ',         
+        'MONTERÍA',       
+        'BOGOTA D.C',    
+        'NEIVA',          
+        'RIOHACHA',       
+        'SANTA MARTA',    
+        'VILLAVICENCIO',  
+        'PASTO',          
+        'CÚCUTA',        
+        'MOCOA',          
+        'ARMENIA',        
+        'PEREIRA',        
+        'SAN ANDRÉS',     
+        'SINCELEJO',      
+        'IBAGUÉ',         
+        'CALI',           
+        'MITÚ',         
+        'CUMARIBO',
+        'SAN JOSÉ DEL GUAVIARE', 
+        'BUCARAMANGA',
+        'MEDELLÍN',
+        'INÍRIDA' 
     ]
     spark_s=(SparkSession.builder.appName("Extract Data").getOrCreate())
     print(spark_s.sparkContext)
