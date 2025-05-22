@@ -13,7 +13,7 @@ def preprocess(path):
     print('Missing values',null_counts,sep='\n')
     df = df.drop('codigoestacion', 'codigosensor', 'departamento', 'descripcionsensor', 'nombreestacion', 'unidadmedida')
     df_t=df.groupby(F.window(F.col('fechaobservacion'),"10 minutes")
-    ).agg(F.sum('valorobservado').alias()
+    ).agg(F.sum('valorobservado').alias('precip_10min')
     ).selectExpr("window.start as fecha_10min","precip_10min")
     df_t=df_t.orderBy("fecha_10min")
     df_t.show(5,False)
