@@ -17,7 +17,6 @@ def preprocess(path):
     ).selectExpr("window.start as fecha_10min","precip_10min")
     df_t=df_t.orderBy("fecha_10min")
     df_t.show(5,False)
-    
 
 if __name__=='__main__':
     spark=SparkSession.builder.appName('ventana').getOrCreate()
