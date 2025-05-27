@@ -4,7 +4,7 @@ sys.path.insert(0, '/home/hadoop/myenv/lib/python3.12/site-packages')
 from pyspark.sql import SparkSession, functions
 from pyspark.errors.exceptions.captured import AnalysisException
 
-def inspect_data(spark,city,txt_output=None):
+def inspect_data(spark,city):
     hdfs_path=f'hdfs:///user/hadoop/data_project/{city}/'
     print(f"Reading data from: {hdfs_path} for city: {city}")
     df=spark.read.parquet(hdfs_path)
@@ -19,40 +19,8 @@ def inspect_data(spark,city,txt_output=None):
     
 if __name__ == "__main__":
     spark=SparkSession.builder.appName("Inspect Data").getOrCreate()
-    capitales_departamentos = [
-        'ARAUCA',        
-        'SOLEDAD', 
-        'CARTAGENA DE INDIAS',  
-        'SOGAMOSO',          
-        'MANIZALES',      
-        'FLORENCIA',      
-        'YOPAL',         
-        'POPAYÁN',        
-        'VALLEDUPAR',     
-        'QUIBDÓ',         
-        'MONTERÍA',       
-        'BOGOTA D.C',    
-        'NEIVA',          
-        'RIOHACHA',       
-        'SANTA MARTA',    
-        'VILLAVICENCIO',  
-        'PASTO',          
-        'CÚCUTA',        
-        'MOCOA',          
-        'ARMENIA',        
-        'PEREIRA',        
-        'SAN ANDRÉS',     
-        'SINCELEJO',      
-        'IBAGUÉ',         
-        'CALI',           
-        'MITÚ',         
-        'CUMARIBO',
-        'SAN JOSÉ DEL GUAVIARE', 
-        'BUCARAMANGA',
-        'MEDELLÍN',
-        'INÍRIDA' 
-    ]
-    for city in capitales_departamentos:
+    CITIES=['SOLEDAD','CARTAGENA DE INDIAS','SOGAMOSO','VALLEDUPAR','BOGOTÁ','NEIVA','RIOHACHA','PASTO','CÚCUTA''ARMENIA''SAN ÁNDRES']
+    for city in CITIES:
         try:
             print(f"Processing data for {city}")
             inspect_data(spark,city)
