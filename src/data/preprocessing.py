@@ -1,5 +1,5 @@
 import sys
-sys.path.insert(0, '/home/hadoop/myenv/lib/python3.12/site-packages')
+sys.path.insert(0,'/home/hadoop/myenv/lib/python3.12/site-packages')
 
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
@@ -24,7 +24,7 @@ def preprocess(path):
     return df_t
 
 if __name__=='__main__':
-    CITIES=['SOLEDAD','CARTAGENA DE INDIAS','SOGAMOSO','VALLEDUPAR','BOGOTÁ','NEIVA','RIOHACHA','PASTO','CÚCUTA''ARMENIA''SAN ÁNDRES']
+    CITIES=['SOLEDAD','CARTAGENA DE INDIAS','SOGAMOSO','VALLEDUPAR','BOGOTÁ','NEIVA','RIOHACHA','PASTO','CÚCUTA','ARMENIA','SAN ÁNDRES']
     spark=SparkSession.builder.appName('ventana').getOrCreate()
     for city in CITIES:
         hdfs_path=f'hdfs:///user/hadoop/data_project/{city}/'
