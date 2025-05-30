@@ -23,6 +23,8 @@ def enrich_data(path,lat:float,lon:float,alt:int,start_date,end_date):
     df_or['fecha_observacion'] = pd.to_datetime(df_or['fecha_observacion'])
     df_or.sort_values(by='fecha_observacion',inplace=True)
     df_or.set_index('fecha_observacion', inplace=True)
+    print('Muestra de datos originales:')
+    print(df_or.head())
     df_or.drop('Unnamed: 0',axis=1,inplace=True)
     df_mete=get_meteostat_data(lat,lon,alt,start_date,end_date)
     df_final=df_mete.join(df_or,how='left',rsuffix='_original')
