@@ -53,7 +53,7 @@ if __name__=='__main__':
         try:
             df_final=enrich_data(hdfs_path,lat,lon,alt,START_DATE,END_DATE)
             output_path=f'hdfs:///user/hadoop/data_project/enriched/{city}'
-            df_final.write.mode('overwrite').parquet(output_path)
+            df_final.write.mode('append').parquet(output_path)
         except AnalysisException as e:
             print(f"Error processing {city}: {e}")
     
