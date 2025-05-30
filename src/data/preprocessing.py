@@ -24,7 +24,7 @@ def preprocess(path):
     return df_t
 
 if __name__=='__main__':
-    CITIES=['SOLEDAD','CARTAGENA DE INDIAS','SOGAMOSO','VALLEDUPAR','BOGOTÁ','NEIVA','RIOHACHA','PASTO','CÚCUTA','ARMENIA','SAN ÁNDRES']
+    CITIES=['SOLEDAD','CARTAGENA DE INDIAS','SOGAMOSO','VALLEDUPAR','BOGOTA D.C','NEIVA','RIOHACHA','PASTO','CÚCUTA','ARMENIA','SAN ANDRÉS']
     spark=SparkSession.builder.appName('ventana').getOrCreate()
     for city in CITIES:
         hdfs_path=f'hdfs:///user/hadoop/data_project/{city}/'

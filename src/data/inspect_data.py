@@ -19,7 +19,7 @@ def inspect_data(spark,city):
     
 if __name__ == "__main__":
     spark=SparkSession.builder.appName("Inspect Data").getOrCreate()
-    CITIES=['BOGOTA D.C','SOLEDAD','CARTAGENA DE INDIAS','SOGAMOSO','VALLEDUPAR','NEIVA','RIOHACHA','PASTO','CÚCUTA','ARMENIA','SAN ÁNDRES']
+    CITIES=['BOGOTA D.C','SAN ANDRÉS','SOLEDAD','CARTAGENA DE INDIAS','SOGAMOSO','VALLEDUPAR','NEIVA','RIOHACHA','PASTO','CÚCUTA','ARMENIA']
     for city in CITIES:
         try:
             print(f"Processing data for {city}")
