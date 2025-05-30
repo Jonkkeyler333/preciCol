@@ -54,6 +54,6 @@ if __name__ == "__main__":
 
         df_temp = preprocess(in_path)
 
-        df_temp = df_temp.repartition(1, "fecha_observacion")
+        # df_temp = df_temp.repartition(1, "fecha_observacion")
 
         df_temp.write.mode("overwrite").parquet(out_path)

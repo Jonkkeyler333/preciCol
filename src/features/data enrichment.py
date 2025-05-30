@@ -35,7 +35,8 @@ def enrich_data(path,lat:float,lon:float,alt:int,start_date,end_date):
     df_final.rename(columns={'precipitacion_f':'precipitacion'},inplace=True)
     print('Datos enriquecidos finales:')
     print(df_final.head())
-    return df_final
+    spark_df = spark.createDataFrame(df_final)
+    return spark_df
     
 if __name__=='__main__':
     CITIES=['SOLEDAD','CARTAGENA DE INDIAS','SOGAMOSO','VALLEDUPAR','BOGOTA D.C','NEIVA','RIOHACHA','PASTO','CÚCUTA','ARMENIA','SAN ANDRÉS']
@@ -46,6 +47,7 @@ if __name__=='__main__':
     END_DATE=datetime(2025,1,1)
     spark = SparkSession.builder.appName('data_enrichment').getOrCreate()
     for city,lat,lon,alt in zip(CITIES,LATITUDES,LONGITUDES,ALTITUDES):
+        print(f"Enriqueciendo datos para la ciudad: {city}")
         hdfs_path=f'hdfs:///user/hadoop/data_project/processed/{city}'
         output_path=f'hdfs:///user/hadoop/data_project/enriched/{city}'
         try:
