@@ -1,13 +1,14 @@
 import sys
-sys.path.insert(0,'/home/hadoop/myenv/lib/python3.12/site-packages')
-
 import os
 
-# Apunta la caché a /tmp/meteostat (o cualquier directorio que exista y sea escribible)
-os.environ["METEOSTAT_CACHE"] = "/tmp/meteostat"
+os.environ['HOME'] = '/tmp/hadoop_home'  # Directorio temporal escribible
+os.makedirs(os.environ['HOME'], exist_ok=True)
 
-# Créalo si es necesario
+# 2. Configurar caché de meteostat
+os.environ["METEOSTAT_CACHE"] = os.path.join(os.environ['HOME'], '.meteostat')
 os.makedirs(os.environ["METEOSTAT_CACHE"], exist_ok=True)
+
+sys.path.insert(0,'/home/hadoop/myenv/lib/python3.12/site-packages')
 
 from pyspark.sql import SparkSession
 from pyspark.sql import SparkSession, functions as F
