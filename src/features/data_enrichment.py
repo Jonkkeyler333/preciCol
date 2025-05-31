@@ -19,12 +19,29 @@ import shutil
 import time
 
 def clear_meteostat_cache():
+    """ Clear the Meteostat cache directory if it exists.
+    This function checks for the METEOSTAT_CACHE environment variable,
+    """
     cache_dir=os.environ.get('METEOSTAT_CACHE', '')
     if cache_dir and os.path.exists(cache_dir):
         shutil.rmtree(cache_dir)
         os.makedirs(cache_dir)
 
 def get_meteostat_data(lat:float,lon:float,start_date,end_date):
+    """Fetch hourly weather data from Meteostat for a given location and date range.
+    This function retrieves weather data for a specific latitude and longitude
+
+    :param lat: latitude of the location
+    :type lat: float
+    :param lon: longitude of the location
+    :type lon: float
+    :param start_date: start date for the data retrieval_
+    :type start_date: _type_
+    :param end_date: end date for the data retrieval
+    :type end_date: _type_
+    :return: DataFrame containing hourly weather data
+    :rtype: pandas.DataFrame
+    """
     ubicacion=Point(lat,lon)
     datos_horarios=Hourly(loc=ubicacion,start=start_date,end=end_date)
     df_mete=datos_horarios.fetch()
@@ -33,6 +50,25 @@ def get_meteostat_data(lat:float,lon:float,start_date,end_date):
     return df_mete.resample('10min').interpolate(method="time")
     
 def enrich_data(path,lat:float,lon:float,start_date,end_date):
+    """Enrich the original data with weather data from Meteostat.
+    This function reads the original data from a specified path, fetches weather data
+    from Meteostat for the given latitude and longitude, and merges the two datasets.
+    It fills missing values in the precipitation column and renames it appropriately.
+    The final enriched DataFrame is returned as a Spark DataFrame.
+
+    :param path: Path to the original data in Parquet format
+    :type path: str
+    :param lat: latitude of the location
+    :type lat: float
+    :param lon: longitude of the location
+    :type lon: float
+    :param start_date: start date for the data retrieval
+    :type start_date: _type_
+    :param end_date: end date for the data retrieval
+    :type end_date: _type_
+    :return: Spark DataFrame containing the enriched data
+    :rtype: pyspark.sql.DataFrame
+    """
     df_original=spark.read.parquet(path)
     df_or=df_original.toPandas()
     df_or['fecha_observacion'] = pd.to_datetime(df_or['fecha_observacion'])
