@@ -1,30 +1,43 @@
-import sys
-sys.path.insert(0, '/home/hadoop/myenv/lib/python3.12/site-packages')
+from datetime import datetime
+from meteostat import Point, Hourly
+import os
+import shutil
 
-from pyspark.sql import SparkSession, functions
+def clear_meteostat_cache():
+    cache_dir = os.environ.get('METEOSTAT_CACHE', '')
+    if cache_dir and os.path.exists(cache_dir):
+        shutil.rmtree(cache_dir)
+        os.makedirs(cache_dir)
+        
+def get_meteostat_data(lat:float,lon:float,alt:int,start_date,end_date):
+    ubicacion=Point(lat,lon)
+    datos_horarios=Hourly(loc=ubicacion,start=start_date,end=end_date)
+    df_mete=datos_horarios.fetch()
+    # df_mete.drop_duplicates(inplace=True)
+    df_mete.drop(columns=['snow','wpgt','tsun'],inplace=True)
+    print(df_mete.info())
+    return df_mete.resample('10min').interpolate(method="time")
 
-if __name__ == "__main__":
-    city = "NEIVA"
-    hdfs_path = f"hdfs:///user/hadoop/data_project/{city}/"
+if __name__ == '__main__':
+    clear_meteostat_cache()
+    df= get_meteostat_data(
+        lat=5.724, 
+        lon=-72.92, #7.8891094035409095, -72.49661523780262 ,5.724185979844469, -72.9244557490702
+        alt=2527, 
+        start_date=datetime(2024, 1, 1), 
+        end_date=datetime(2025, 1, 1)
+    )
+    # inicio = datetime(2024, 1, 1)
+    # fin = datetime(2025, 1, 1)
+    # ubicacion = Point(1.2136,-77.2811)
 
-    spark = SparkSession.builder.appName("Verify Data").getOrCreate()
+    # # Usar parámetros nombrados (loc, start, end)
+    # datos_horarios = Hourly(
+    #     loc=ubicacion,  # Parámetro clave
+    #     start=inicio,
+    #     end=fin
+    # )
 
-    print(f"Reading data from: {hdfs_path}")
-    df = spark.read.parquet(hdfs_path)
-
-    print("Schema:")
-    df.printSchema()
-
-    print("Sample rows:")
-    df.show(10)
+    # df_horario = datos_horarios.fetch()
+    # print(df_horario.tail())
     
-    df=df.orderBy("fechaobservacion",ascending=True)
-    
-    print("Sample rows after ordering:")
-    df.show(10)
-
-    # print("Count of records per month:")
-    # df.groupBy("month").count().orderBy("month").show()
-
-    # total_count = df.count()
-    # print(f"Total records: {total_count}")
