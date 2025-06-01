@@ -1,7 +1,7 @@
 # precipitacion-analisis
 Proyecto Final de la asignatura de analisis de datos a gran escala
 
-- ¿Cómo varía temporalmente la precipitación a escala nacional y por ciudad a lo largo de 2024?
+- ¿Cómo varía temporalmente la precipitación por ciudad a lo largo de 2024?
 
     ­Objetivo: identificar patrones estacionales (estaciones lluviosas vs. secas), posibles ciclos semanales o mensuales, y detectar picos de precipitación que puedan asociarse con fenómenos extremos (huracanes, frentes fríos, etc.).
 
