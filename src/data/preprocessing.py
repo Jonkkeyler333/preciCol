@@ -41,19 +41,10 @@ def preprocess(in_path):
     return df_t
 
 if __name__ == "__main__":
-    CITIES = [
-        'SOLEDAD','CARTAGENA DE INDIAS','SOGAMOSO','VALLEDUPAR',
-        'BOGOTA D.C','NEIVA','RIOHACHA','PASTO','CÚCUTA',
-        'ARMENIA','SAN ANDRÉS'
-    ]
+    CITIES = ['SOLEDAD','CARTAGENA DE INDIAS','SOGAMOSO','VALLEDUPAR','BOGOTA D.C','NEIVA','RIOHACHA','PASTO','CÚCUTA','ARMENIA','SAN ANDRÉS']
     spark = SparkSession.builder.appName("ventana").getOrCreate()
-
     for city in CITIES:
         in_path  = f"hdfs:///user/hadoop/data_project/{city}/"
         out_path = f"hdfs:///user/hadoop/data_project/processed/{city}"
-
         df_temp = preprocess(in_path)
-
-        # df_temp = df_temp.repartition(1, "fecha_observacion")
-
         df_temp.write.mode("append").parquet(out_path)

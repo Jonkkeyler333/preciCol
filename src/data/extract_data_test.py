@@ -14,14 +14,13 @@ def hdfs_exists(spark_s,path):
     except AnalysisException:
         return False
 
-
 def fetch_data(offset,limit,url:str,max_retries=4,city:str=''):
     if not city:
         raise ValueError("City parameter is required.")
     params={"$offset":offset,
             '$limit':limit,
             '$order':'fechaobservacion',
-            "$where":f"fechaobservacion > '2024-01-01T00:00:00.000' and fechaobservacion < '2025-01-01T00:00.000' and municipio = '{city.upper()}'"}
+            "$where":f"fechaobservacion > '2025-01-01T00:00.000' and municipio = '{city.upper()}'"}
     backoff=1
     for i in range(max_retries):
         try:
@@ -43,43 +42,11 @@ def fetch_data(offset,limit,url:str,max_retries=4,city:str=''):
     return []
 
 if __name__ == "__main__":
-    capitales_departamentos = [
-        'ARAUCA',        
-        'SOLEDAD', 
-        'CARTAGENA DE INDIAS',  
-        'SOGAMOSO',          
-        'MANIZALES',      
-        'FLORENCIA',      
-        'YOPAL',         
-        'POPAYÁN',        
-        'VALLEDUPAR',     
-        'QUIBDÓ',         
-        'MONTERÍA',       
-        'BOGOTA D.C',    
-        'NEIVA',          
-        'RIOHACHA',       
-        'SANTA MARTA',    
-        'VILLAVICENCIO',  
-        'PASTO',          
-        'CÚCUTA',        
-        'MOCOA',          
-        'ARMENIA',        
-        'PEREIRA',        
-        'SAN ANDRÉS',     
-        'SINCELEJO',      
-        'IBAGUÉ',         
-        'CALI',           
-        'MITÚ',         
-        'CUMARIBO',
-        'SAN JOSÉ DEL GUAVIARE', 
-        'BUCARAMANGA',
-        'MEDELLÍN',
-        'INÍRIDA' 
-    ]
+    CITIES=['SOLEDAD','CARTAGENA DE INDIAS','VALLEDUPAR','BOGOTA D.C','NEIVA','RIOHACHA','PASTO','CÚCUTA','ARMENIA','SAN ANDRÉS']
     spark_s=(SparkSession.builder.appName("Extract Data").getOrCreate())
     print(spark_s.sparkContext)
-    for city in capitales_departamentos:
-        if hdfs_exists(spark_s,f"hdfs:///user/hadoop/data_project/{city}/"):
+    for city in CITIES:
+        if hdfs_exists(spark_s,f"hdfs:///user/hadoop/data_project/test/{city}/"):
             print(f"Data for {city} already exists. Skipping...")
             continue
         print(f"Processing data for {city}")
@@ -100,8 +67,7 @@ if __name__ == "__main__":
             spark_df=spark_df.orderBy(spark_df['fechaobservacion'],ascending=True)
             spark_df.printSchema()
             spark_df.show(10)
-            spark_df=spark_df.withColumn('month',functions.month(spark_df['fechaobservacion']))
-            spark_df.write.mode("append").partitionBy('month').parquet(hdfs_output_path)
+            spark_df.write.mode("append").parquet(hdfs_output_path)
             offset+=limit
         print(f"Data for {city} processed successfully",end='\n')
         time.sleep(20)
