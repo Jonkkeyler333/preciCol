@@ -72,11 +72,9 @@ if __name__ == "__main__":
     train.drop(columns=['hour_timestamp'],inplace=True)
     val.drop(columns=['hour_timestamp'],inplace=True)
     
-    # Save the datasets with separate target columns
     train.to_csv('hdfs:///user/hadoop/data_project/features/train_hourly.csv')
     val.to_csv('hdfs:///user/hadoop/data_project/features/val_hourly.csv')
     
-    # Also save X and y separately if needed for modeling
     train_features=train.drop(columns=['precipitacion_h'])
     val_features=val.drop(columns=['precipitacion_h'])
     
