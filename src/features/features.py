@@ -11,7 +11,7 @@ import numpy as np
 if __name__ == "__main__":
     spark=SparkSession.builder.appName("FeatureEngineering").getOrCreate()
     print('Starting feature engineering process...')
-    path='./drive/MyDrive/data_project/features/full_data'
+    path='hdfs:///user/hadoop/data_project/features/full_data'
     df=spark.read.parquet(path)
     
     df_hourly=df.withColumn('hour',F.date_trunc('hour',F.col('time')))
@@ -73,17 +73,17 @@ if __name__ == "__main__":
     val.drop(columns=['hour_timestamp'],inplace=True)
     
     # Save the datasets with separate target columns
-    train.to_csv('./drive/MyDrive/data_project/features/train_hourly.csv')
-    val.to_csv('./drive/MyDrive/data_project/features/val_hourly.csv')
+    train.to_csv('hdfs:///user/hadoop/data_project/features/train_hourly.csv')
+    val.to_csv('hdfs:///user/hadoop/data_project/features/val_hourly.csv')
     
     # Also save X and y separately if needed for modeling
     train_features=train.drop(columns=['precipitacion_h'])
     val_features=val.drop(columns=['precipitacion_h'])
     
-    train_features.to_csv('./drive/MyDrive/data_project/features/train_hourly_features.csv')
-    val_features.to_csv('./drive/MyDrive/data_project/features/val_hourly_features.csv')
-    train_target.to_csv('./drive/MyDrive/data_project/features/train_hourly_target.csv')
-    val_target.to_csv('./drive/MyDrive/data_project/features/val_hourly_target.csv')
+    train_features.to_csv('hdfs:///user/hadoop/data_project/features/train_hourly_features.csv')
+    val_features.to_csv('hdfs:///user/hadoop/data_project/features/val_hourly_features.csv')
+    train_target.to_csv('hdfs:///user/hadoop/data_project/features/train_hourly_target.csv')
+    val_target.to_csv('hdfs:///user/hadoop/data_project/features/val_hourly_target.csv')
     
     print("Feature engineering completed successfully.")
     print("Train data sample:")

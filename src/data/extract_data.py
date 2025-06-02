@@ -8,6 +8,16 @@ import numpy as np
 import json,os,requests,time
 
 def hdfs_exists(spark_s,path):
+    """Check if a given path exists in HDFS using Spark.
+    This function attempts to read a Parquet file from the specified path.
+    If the file exists, it returns True; otherwise, it catches an AnalysisException
+    :param spark_s: SparkSession object used to interact with Spark
+    :type spark_s: SparkSession
+    :param path: Path to check in HDFS
+    :type path: str
+    :return: True if the path exists, False otherwise
+    :rtype: bool
+    """
     try:
         spark_s.read.parquet(path)
         return True
@@ -16,6 +26,25 @@ def hdfs_exists(spark_s,path):
 
 
 def fetch_data(offset,limit,url:str,max_retries=4,city:str=''):
+    """Fetch data from a specified URL with pagination.
+    This function retrieves data from a given URL using the specified offset and limit.
+    It handles rate limiting by implementing exponential backoff for retries.
+    
+    :param offset: the offset for pagination
+    :type offset: int
+    :param limit: size of the data to fetch in each request (batch size)
+    :type limit: int
+    :param url: the URL to fetch data from
+    :type url: str
+    :param max_retries: max retries for do the requests, defaults to 4
+    :type max_retries: int, optional
+    :param city: the city for fetch the data, defaults to ''
+    :type city: str, optional
+    :raises ValueError: if the city parameter is not provided
+    :raises requests.exceptions.RequestException: if the request fails
+    :return: JSON response from the API or an empty list if the request fails after retries
+    :rtype: list
+    """
     if not city:
         raise ValueError("City parameter is required.")
     params={"$offset":offset,
