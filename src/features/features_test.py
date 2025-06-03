@@ -6,7 +6,6 @@ from pyspark.sql import functions as F
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
 import numpy as np
-import joblib
 
 if __name__ == "__main__":
     spark = SparkSession.builder.appName("FeatureEngineeringTest").getOrCreate()
@@ -36,6 +35,7 @@ if __name__ == "__main__":
     df_hourly = df_hourly.orderBy('city_id', 'hour')
 
     df_p = df_hourly.toPandas()
+    df_p.dropna(inplace=True)
     df_p['hour_timestamp'] = pd.to_datetime(df_p['hour'])
     df_p['day_of_year'] = df_p['hour_timestamp'].dt.dayofyear.astype('int')
     df_p['day_of_week'] = df_p['hour_timestamp'].dt.dayofweek.astype('int')
@@ -49,28 +49,21 @@ if __name__ == "__main__":
     df_p["hod_sin"] = np.sin(2 * np.pi * df_p["hour_of_day"] / 24)
     df_p["hod_cos"] = np.cos(2 * np.pi * df_p["hour_of_day"] / 24)
 
-    # Definir columnas a escalar
     features_scaler = [
         'precipitacion_min','precipitacion_max','temp_mean','temp_min','temp_max',
         'rhum_mean','wspd_max', 'wspd_min', 'wspd_avg','wdir_avg','dwpt_avg',
         'pres_max','pres_min','pres_avg', 'coco_max',
         'day_of_year', 'day_of_week', 'hour_of_day'
     ]
-
-    # Cargar scaler previamente ajustado con train
-    scaler = joblib.load('hdfs:///user/hadoop/data_project/features/standard_scaler.joblib')
-
-    # Filtrar solo datos de test (por ejemplo, desde 2024-10-01 en adelante)
-    threshold_test = pd.Timestamp('2024-10-01')
-    test = df_p[df_p['hour_timestamp'] >= threshold_test].copy()
-
-    # Aplicar el scaler
+    test=df_p.copy()
+    
+    train=pd.read_csv('hdfs:///user/hadoop/data_project/features/train_features.csv')
+    scaler = StandardScaler()
+    scaler.fit(train[features_scaler])
     test[features_scaler] = scaler.transform(test[features_scaler])
 
-    # Quitar columna innecesaria
-    test.drop(columns=['hour_timestamp'], inplace=True)
+    df_p.drop(columns=['hour_timestamp'], inplace=True)
 
-    # Guardar un CSV por mes
     for (year, month), df_month in test.groupby([test['hour'].dt.year, test['hour'].dt.month]):
         fname = f'hdfs:///user/hadoop/data_project/features/test_{year}_{month:02d}.csv'
         df_month.to_csv(fname, index=False)

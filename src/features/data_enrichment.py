@@ -111,6 +111,3 @@ if __name__=='__main__':
         except AnalysisException as e:
             print(f"Error processing {city}: {e}")
     print("Proceso de enriquecimiento de datos completado.")
-    
-    
-    
