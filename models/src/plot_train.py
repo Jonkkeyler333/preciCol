@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
     plt.style.use('ggplot')
-    log_path = "c:/Users/keyle/OneDrive/Documentos/GitHub/precipitacion-analisis/models/logs/experiment_log_20250602_223623.txt"
+    log_path = "c:/Users/keyle/OneDrive/Documentos/GitHub/precipitacion-analisis/models/logs/experiment_log_20250603_031009.txt"
     df = pd.read_csv(log_path, sep='\t')
     fig, axs = plt.subplots(1, 2, figsize=(14, 5))
     axs[0].plot(df['Epoch'], df['Loss'], label='Train Loss')

@@ -21,7 +21,8 @@ def create_time_features(df:pd.DataFrame,window_size=30):
     X_list,y_list,C_list=[],[],[]
     for cid in df['city_id'].unique():
         df_c=df[df['city_id']==cid].sort_values('hour').reset_index(drop=True)
-        x=df_c.drop(columns=['city_id','hour','Unnamed: 0']).values
+        x=df_c.drop(columns=['city_id','hour','Unnamed: 0','precipitacion_h','precipitacion_max','precipitacion_min']).values
+        print(df_c.head())
         y=df_c['precipitacion_h'].values
         if len(df_c) < window_size:
             print(f"City {cid} has less than {window_size} records, skipping.")
@@ -60,12 +61,12 @@ def dataset(path='./drive/MyDrive/data_project/features/train_hourly.csv',path_v
     X_val=tf.convert_to_tensor(X_val_f,dtype=tf.float32)
     y_val=tf.convert_to_tensor(y_val,dtype=tf.float32)
     C_val=tf.convert_to_tensor(C_val,dtype=tf.int32)
-    train_dataset=tf.data.Dataset.from_tensor_slices(((X_train, y_train),C_train))
+    train_dataset=tf.data.Dataset.from_tensor_slices(((X_train,C_train),y_train))
     train_dataset=train_dataset.batch(32).prefetch(tf.data.AUTOTUNE)
-    vali_dataset=tf.data.Dataset.from_tensor_slices(((X_val, y_val),C_val))
+    vali_dataset=tf.data.Dataset.from_tensor_slices(((X_val,C_val),y_val))
     vali_dataset=vali_dataset.batch(32).prefetch(tf.data.AUTOTUNE)     
-    for (batch,city) in train_dataset.take(1):
-        print(f"Batch shape: {batch[0].shape}, City shape: {city.shape}")
+    for (batch,y) in train_dataset.take(1):
+        print(f"Batch shape: {batch[0].shape}, City shape: {y.shape}")
     return train_dataset,vali_dataset
     
 if __name__ == "__main__":

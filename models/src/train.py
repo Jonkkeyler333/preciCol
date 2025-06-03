@@ -9,7 +9,7 @@ print(tf.config.list_physical_devices('GPU'))
 
 train_ds,val_ds=dataset()
 
-n_features=26
+n_features=23
 n_cities=10
 embedding_dim=16
 
