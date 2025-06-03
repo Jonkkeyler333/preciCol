@@ -25,7 +25,6 @@ def create_time_features(df:pd.DataFrame,window_size=30):
         y=df_c['precipitacion_h'].values
         if len(df_c) < window_size:
             print(f"City {cid} has less than {window_size} records, skipping.")
-        ##ventana de 30 horas 
         for i in range(len(df_c)-window_size):
             X_list.append(x[i:i+window_size])
             y_list.append(y[i+window_size])
